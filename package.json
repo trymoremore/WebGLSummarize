@@ -1,0 +1,35 @@
+{
+  "name": "webglsummarize",
+  "version": "1.0.0",
+  "description": "webGL2,computer graphic",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5",
+    "vue-tsc": "^1.8.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trymoremore/WebGLSummarize.git"
+  },
+  "keywords": [
+    "webGL2",
+    "computer",
+    "graphic"
+  ],
+  "author": "hailong.zhuang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trymoremore/WebGLSummarize/issues"
+  },
+  "homepage": "https://github.com/trymoremore/WebGLSummarize#readme"
+}
