@@ -9,13 +9,14 @@ export abstract class RenderExample implements IRenderExample {
 
     public Init(gl : WebGL2RenderingContext){
 
+        RenderExample.instance = this;
         this.gl = gl;
 
     }
 
     public Destroy(){
 
-
+        RenderExample.instance = null;
 
     }
 

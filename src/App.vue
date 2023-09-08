@@ -1,50 +1,49 @@
 <script setup lang="ts">
-  import { createApp, onMounted, reactive } from "vue";
+  import {onMounted, reactive } from "vue";
   import Graphic from "./core/Graphic"
-  import {IRenderExample} from "./renderExample/IRenderExample"
-  import test from "./renderExample/base/test.vue"
   import { RenderExample } from "./renderExample/RenderExample";
+  import { ExampleDetail, ExampleList, renderExampleCollect } from "./renderExample/RenderExampleCollect";
 
-
-  interface ExampleList{
-
-    isShow : boolean;
-    label : string;
-    example : IRenderExample[]
-
-  }
+  
 
   onMounted(()=>{
     
     Graphic.Init(document.getElementById("render") as HTMLCanvasElement);
-    let z = createApp(test);
-    z.mount('#hud')
-    console.log(test.name);
 
   });
 
-  window.requestAnimationFrame((dt : number)=>{
+  let lastTime : number = 0;
+  const render = (t : number)=>{
 
     if(RenderExample.instance != null){
-      RenderExample.instance.Update(dt);
+      RenderExample.instance.Update(t - lastTime);
+      lastTime = t;
     }
 
-  });
+    window.requestAnimationFrame(render);
+
+  }
+  window.requestAnimationFrame(render);
   
+  let lastExample : ExampleDetail | null = null;
   const app = reactive({
 
-    list : [
-      {
-        isShow : false,
-        label : "base",
-        example : []
-      }
-    ],
-    listClick(list : ExampleList){
+    list : renderExampleCollect,
+    
+    ListClick(list : ExampleList){
 
       list.isShow = !list.isShow;
 
     },
+
+    ExampleClick(example : ExampleDetail){
+
+      if(lastExample == example)return;
+      if(lastExample != null)lastExample.app.unmount();
+      example.app.mount('#hud');
+      lastExample = example;
+
+    }
 
   });
 
@@ -57,8 +56,8 @@
         <a href="https://github.com/austinEng/webgpu-samples">Github</a>
         <hr />
         <div v-for="item in app.list">
-          <a class="example-list"  @click="app.listClick(item)">{{item.label}}</a>
-          <a class="example-link nav-link" v-show="item.isShow"  v-for="detial in item.example">{{detial}}</a>
+          <a class="example-list"  @click="app.ListClick(item)">{{item.label}}</a>
+          <a class="example-link nav-link" @click="app.ExampleClick(detial)" v-show="item.isShow"  v-for="detial in item.example">{{detial.name}}</a>
           <hr v-show="item.isShow"/>
         </div>
       </div>
@@ -114,6 +113,10 @@ a:hover {
   height: 100%;
   background:#000000
 }
+#hud{
+  position: relative;
+  z-index: 5;
+}
 #render {
   text-align: center;
   position: absolute;
@@ -121,6 +124,7 @@ a:hover {
   right: 2%;
   width: 96%;
   height: 96%;
+  /* z-index: -5; */
 }
 .example-link {
   display: block;
